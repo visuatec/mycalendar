@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gregorian -> IFC Superimposed</title>
+  <!-- Bootstrap (Optional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  >
+</head>
+<body class="bg-light">
+
+<div class="container my-5">
+  <h1>Superimposed IFC vs. Gregorian</h1>
+
+  <p>
+    Enter:
+    <ul>
+      <li><strong>Year</strong> only => Show entire year (Gregorian + IFC).</li>
+      <li><strong>Year + Month</strong> => Show just that month (Gregorian + IFC).</li>
+      <li><strong>Year + Month + Day</strong> => Show single date result (as before).</li>
+    </ul>
+  </p>
+
+  <form action="{{ url_for('show') }}" method="POST" class="row g-3">
+    <div class="col-md-2">
+      <label for="year" class="form-label">Year <span class="text-danger">*</span></label>
+      <input type="number" class="form-control" id="year" name="year" placeholder="e.g. 2025" value="2025" required>
+    </div>
+    <div class="col-md-2">
+      <label for="month" class="form-label">Month</label>
+      <input type="number" class="form-control" id="month" name="month" placeholder="1..12">
+    </div>
+    <div class="col-md-2">
+      <label for="day" class="form-label">Day</label>
+      <input type="number" class="form-control" id="day" name="day" placeholder="1..31">
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary mt-3">Go</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

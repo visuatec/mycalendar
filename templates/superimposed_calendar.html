@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IFC & Gregorian Calendar for {{ year }}</title>
+
+  <!-- Bootstrap (Optional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  >
+
+  <style>
+    /* Gregorian date in gray */
+    .greg-date {
+      color: gray;
+      font-size: 0.9em;
+    }
+    .ifc-day {
+      display: block; /* so we can style it separately */
+      font-weight: bold;
+      color: black; /* default anyway */
+    }
+    .special-day { /* For Leap Day, Year Day, etc. */
+      color: darkblue;
+      font-style: italic;
+    }
+    .table-month {
+      margin-bottom: 2rem;
+    }
+    .card-month-header {
+      background-color: #f8f9fa;
+      padding: 0.75rem;
+      text-align: center;
+      font-weight: bold;
+      border-bottom: 1px solid #dee2e6;
+    }
+  </style>
+</head>
+<body class="bg-light">
+<div class="container my-4">
+
+  <h1 class="mb-4">IFC & Gregorian for {{ year }}</h1>
+  {% if is_leap %}
+    <p><strong>{{ year }}</strong> is a leap year (Gregorian). You will see a separate <em>Leap Day</em> after June.</p>
+  {% else %}
+    <p><strong>{{ year }}</strong> is a common (non-leap) year.</p>
+  {% endif %}
+
+  <!-- Loop through each "month" (or special day) in the IFC structure -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+    {% for month in months_data %}
+      <div class="col">
+        <div class="card h-100 table-month">
+          <div class="card-month-header">
+            {{ month.month_name }}
+          </div>
+          <div class="card-body p-0">
+            {% if month.month_name in ['Leap Day', 'Year Day'] %}
+              <!-- Single day "special month" -->
+              <table class="table table-bordered text-center mb-0">
+                <tbody>
+                  <tr>
+                  {% for row in month.weeks %}
+                    {% for cell in row %}
+                      {% if cell[0] is not none %}
+                        <!-- IFC day number? (Should not happen for single day) -->
+                        <td>
+                          <span class="ifc-day">{{ cell[0] }}</span>
+                          <span class="greg-date">{{ cell[1] }}</span>
+                        </td>
+                      {% else %}
+                        <!-- Just a special label (Leap/Year) in a single cell with the Gregorian date -->
+                        <td>
+                          <span class="special-day">{{ month.month_name }}</span><br/>
+                          <span class="greg-date">{{ cell[1] }}</span>
+                        </td>
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                  </tr>
+                </tbody>
+              </table>
+            {% else %}
+              <!-- Normal 4x7 month -->
+              <table class="table table-bordered text-center mb-0">
+                <tbody>
+                  {% for week in month.weeks %}
+                    <tr>
+                      {% for cell in week %}
+                        {# cell is a tuple: (ifc_day, greg_str) #}
+                        {% set ifc_day = cell[0] %}
+                        {% set greg_date_str = cell[1] %}
+                        <td>
+                          <span class="ifc-day">{{ ifc_day }}</span>
+                          <span class="greg-date">{{ greg_date_str }}</span>
+                        </td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <!-- Back button -->
+  <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">Go Back</a>
+</div>
+
+<!-- Bootstrap JS (if desired) -->
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+</body>
+</html>

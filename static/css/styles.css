@@ -1,0 +1,15 @@
+.calendar-container table {
+  margin-bottom: 2rem;
+  border: 1px solid #ccc;
+  width: 100%;
+  text-align: center;
+}
+
+.calendar-container th {
+  background-color: #f8f9fa;
+}
+
+.calendar-container td {
+  height: 3rem;
+  vertical-align: middle;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IFC for {{ year }}</title>
+
+  <!-- Optional: Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  >
+  <!-- Custom CSS (optional) -->
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/styles.css') }}"
+  >
+</head>
+<body class="bg-light">
+<div class="container py-5">
+  <h1 class="mb-4">International Fixed Calendar for {{ year }}</h1>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for month_info in calendar_data %}
+      <div class="col">
+        <div class="card mb-4">
+          <div class="card-header text-center">
+            <strong>{{ month_info.month_name }}</strong>
+          </div>
+          <div class="card-body">
+            {% if month_info.weeks and month_info.day_names %}
+              <!-- It's one of the 13 standard months, with 28 days in 4 rows of 7 -->
+              <table class="table table-bordered text-center mb-0">
+                <thead>
+                  <tr>
+                    {% for day_name in month_info.day_names %}
+                      <th>{{ day_name }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for week in month_info.weeks %}
+                    <tr>
+                      {% for day_num in week %}
+                        <td>{{ day_num }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% elif month_info.month_name == 'Leap Day' %}
+              <p class="text-center">Leap Day — {{ year }} is a leap year!</p>
+            {% elif month_info.month_name == 'Year Day' %}
+              <p class="text-center">Year Day (365th day)</p>
+            {% else %}
+              <p class="text-center">Special day outside the normal months</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">Go Back</a>
+</div>
+</body>
+</html>
